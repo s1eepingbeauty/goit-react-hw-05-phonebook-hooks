@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import styles from './styles.module.css';
@@ -8,29 +8,32 @@ const INITIAL_STATE = {
   number: '',
 };
 
-class ContactForm extends Component {
-  state = INITIAL_STATE;
+const ContactForm = ({ onAdd, onCheckUnique }) => {
+  const [name, setName] = useState(INITIAL_STATE.name);
+  const [number, setNumber] = useState(INITIAL_STATE.number);
 
-  handleChangeForm = ({ target }) => {
+  const handleChangeForm = ({ target }) => {
     const { name, value } = target;
-    this.setState({ [name]: value });
+    switch (name) {
+      case 'name': setName(value);
+        break;
+      case 'number': setNumber(value);
+        break;
+      default:
+        break;
+    }
   };
 
-  handleSubmitForm = (e) => {
+  const handleSubmitForm = (e) => {
     e.preventDefault();
-    const { name, number } = this.state;
-    const { onAdd } = this.props;
-
-    const isValidatedForm = this.validateForm();
+    const isValidatedForm = validateForm();
 
     if (!isValidatedForm) return;
     onAdd({ id: uuid(), name, number });
-    this.resetForm();
+    resetForm();
   };
 
-  validateForm = () => {
-    const { name, number } = this.state;
-    const { onCheckUnique } = this.props;
+  const validateForm = () => {
     if (!name || !number) {
       alert('Some field is empty');
       return false;
@@ -38,19 +41,20 @@ class ContactForm extends Component {
     return onCheckUnique(name);
   };
 
-  resetForm = () => this.setState(INITIAL_STATE);
+  const resetForm = () => {
+    setName(INITIAL_STATE.name);
+    setNumber(INITIAL_STATE.number);
+  };
 
-  render() {
-    const { name, number } = this.state;
     return (
-      <form className={styles.contactForm} onSubmit={this.handleSubmitForm}>
+      <form className={styles.contactForm} onSubmit={handleSubmitForm}>
         <input
           className={styles.contactFormName}
           type="text"
           name="name"
           placeholder="Enter name"
           value={name}
-          onChange={this.handleChangeForm}
+          onChange={handleChangeForm}
         />
         <br />
         <input
@@ -59,7 +63,7 @@ class ContactForm extends Component {
           name="number"
           placeholder="Enter phone number"
           value={number}
-          onChange={this.handleChangeForm}
+          onChange={handleChangeForm}
         />
         <br />
         <button className={styles.addBtn} type="submit">
@@ -67,7 +71,6 @@ class ContactForm extends Component {
         </button>
       </form>
     );
-  }
 }
 
 export default ContactForm;
