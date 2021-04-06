@@ -1,0 +1,33 @@
+body {
+    text-align: center;
+    color: darkblue;
+}
+
+.phoneBookContainer {
+    background: url(./img/original.jpg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 600px;
+    height: 460px;
+    padding: 25px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.phoneBook,
+.contacts {
+    width: 50%;
+}
+
+.contacts {
+    height: 430px;
+    overflow: auto;
+}
+
+h1, h2 {
+    font-size: 24px;
+    margin: 0;
+    padding-left: 70px;
+    padding-bottom: 10px;
+    text-align: left;
+}
